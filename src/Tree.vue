@@ -10,7 +10,7 @@
     >
       <TresMesh :position="[0, 1 * modelValue.size,0]" >
             <TresCylinderGeometry :args="[.2 * modelValue.size, .2 * modelValue.size, 2 * modelValue.size ]"/>
-          <TresMeshToonMaterial color="#851" />
+          <TresMeshPhongMaterial color="#851" />
       </TresMesh>
       <template v-if="modelValue.type == 'decidious'">
         <TresMesh :position="[0,1.5*modelValue.size,0]">

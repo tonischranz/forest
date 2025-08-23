@@ -8,7 +8,7 @@
     >
       <TresMesh :position="[0, 1 * modelValue.size,-.2*modelValue.size]" >
             <TresCylinderGeometry :args="[.2 * modelValue.size, .2 * modelValue.size, 2 * modelValue.size ]"/>
-          <TresMeshToonMaterial color="#851" />
+          <TresMeshPhongMaterial color="#851" />
       </TresMesh>
     </TresGroup>
 </template>

@@ -2,7 +2,7 @@
     <TresGroup :position="[((x*136)+(y * 68)),-.25,(y*118)]">
         <TresMesh :rotation-x="Math.PI / 2" >
         <TresExtrudeGeometry :args="[hexFloor]" />
-        <TresMeshToonMaterial :color="color" />
+        <TresMeshPhongMaterial :color="color" />
         </TresMesh>
         <Tree v-for="(t,i) of trees"
             :model-value="t"
@@ -58,7 +58,6 @@ setup() {
             size: 2 +(Math.random()*5),
             x: -64 + Math.random()*128,
             z: -64 + Math.random()*148,
-            uuid: crypto.randomUUID(),
       });
       
       let newTree = createNewTree();

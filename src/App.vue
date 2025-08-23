@@ -3,15 +3,28 @@
     <TresPerspectiveCamera  />
 
      <OrbitControls />
-    <TresMesh>
-      <TresCylinderGeometry :args="[.1, .1, 75]" />
+
+     <TresMesh :position="[0,0,10]">
+      <TresCylinderGeometry :args="[.1, .1, 75]"/>
+      <TresMeshToonMaterial color="#000" />
+    </TresMesh>
+    <TresMesh :position="[0,0,10]">
+      <TresCylinderGeometry :args="[.1, .1, 75]"/>
       <TresMeshToonMaterial color="#0F3" />
     </TresMesh>
-    <TresMesh :rotation-z="Math.PI/2">
+    <TresMesh>
+      <TresCylinderGeometry :args="[.1, .1, 75]"/>
+      <TresMeshToonMaterial color="#0F3" />
+    </TresMesh>
+    <TresMesh :rotation-z="Math.PI/2" :position="[0,0,10]">
       <TresCylinderGeometry :args="[.1, .1, 756]" />
       <TresMeshToonMaterial color="#F03" />
     </TresMesh>
-    <TresMesh :rotation-x="Math.PI/2">
+    <TresMesh :rotation-z="Math.PI/2">
+      <TresCylinderGeometry :args="[.1, .1, 756]" />
+      <TresMeshToonMaterial color="#907" />
+    </TresMesh>
+    <TresMesh :rotation-x="Math.PI/2" :position="[0,0,10]">
       <TresCylinderGeometry :args="[.1, .1, 756]" />
       <TresMeshToonMaterial color="#03F" />
     </TresMesh>
@@ -45,15 +58,15 @@
       @selected="w=>{selected=w}"
       color="#999" />
     
-    <TresGridHelper :args="[128, 128]" />
+    <TresGridHelper v-if="grid" :args="[188, 128]" />
 
-    <TresDirectionalLight :position="[0, 2, 4]" :intensity="1.2" cast-shadow />
+    <TresDirectionalLight :position="[0, 2000, 4000]" :intensity="1.2" cast-shadow />
   </TresCanvas>
    <div class="overlay">
         &#x2692; meine welt
    </div>
    <div class="overlay bottom-right">
-    <button @click.stop.prevent>*</button>
+    <button @click.stop.prevent="grid=!grid">*</button>
    </div>
    <div class="overlay bottom-left">
     <pre>{{ selected }}</pre>
@@ -90,6 +103,7 @@ export default {
       growingStop: false,
       wood: [],
       selected:null,
+      grid:true,
     }
   },
   components: {
