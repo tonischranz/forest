@@ -1,40 +1,36 @@
 <template>
   <TresCanvas clear-color="#001" ref="canvas" >
-    <TresPerspectiveCamera ref="me" />
+    <TresPerspectiveCamera  />
 
      <OrbitControls />
     <TresMesh>
       <TresCylinderGeometry :args="[.1, .1, 75]" />
-      <TresMeshToonMaterial color="#F03" />
+      <TresMeshToonMaterial color="#0F3" />
     </TresMesh>
     <TresMesh :rotation-z="Math.PI/2">
       <TresCylinderGeometry :args="[.1, .1, 756]" />
-      <TresMeshToonMaterial color="#0F3" />
+      <TresMeshToonMaterial color="#F03" />
     </TresMesh>
     <TresMesh :rotation-x="Math.PI/2">
       <TresCylinderGeometry :args="[.1, .1, 756]" />
       <TresMeshToonMaterial color="#03F" />
     </TresMesh>
 
-    <TresMesh :rotation-x="Math.PI / 2" >
+    <!-- <TresMesh :rotation-x="Math.PI / 2" >
       <TresExtrudeGeometry :args="[hexFloor]" />
       <TresMeshToonMaterial color="#630" />
-    </TresMesh>
+    </TresMesh> -->
 
-    <TresMesh :position="[0,5,0]">
+    <!-- <TresMesh :position="[0,5,0]">
       <TresBufferGeometry />
       <TresMeshToonMaterial color="#ff0" />
-    </TresMesh>
+    </TresMesh> -->
 
-    <!-- <GrowingTree v-for="(t,i) of trees"
-      @treeClicked="t=>treeClicked(t)"
-      :model-value="t" @fallen="handleFallen(t)"
-      :key="t.uuid"
-    /> -->
-
+    <Hex x="0" y="0" color="#444" />
+    
     <Hex x="1" y="0" color="#aa0" />
     <Hex x="-1" y="0" color="#0a0" />
-    <Hex x="1" y="-1" color="#404" />
+    <Hex x="1" y="-1" color="#808" />
     <Hex x="-1" y="1" color="#0aa" />
     <Hex x="0" y="-1" color="#a70" />
     <Hex x="0" y="1" color="#a00" />
@@ -63,7 +59,7 @@
     <button @click.stop.prevent="trees=[];createForest()">*</button>
    </div>
    <div class="overlay bottom-left">
-    <pre>{{ $refs.me }}</pre>
+    <pre></pre>
    </div>
 </template>
 
@@ -72,7 +68,6 @@
 import { TresCanvas, useLoop } from '@tresjs/core';
 import AnimatedCube from './AnimatedCube.vue';
 import AnimatedSphere from './AnimatedSphere.vue';
-// import GrowingTree from './LogoTree.vue';
 import { OrbitControls, PointerLockControls, Superformula } from '@tresjs/cientos'
 import * as THREE from 'three'
 import Hex from './Hex.vue';

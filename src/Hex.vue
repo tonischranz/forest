@@ -1,5 +1,5 @@
 <template>
-    <TresGroup :position="[((x*136)+(y * 68)),-.5,(y*118)]">
+    <TresGroup :position="[((x*136)+(y * 68)),-.25,(y*118)]">
         <TresMesh :rotation-x="Math.PI / 2" >
         <TresExtrudeGeometry :args="[hexFloor]" />
         <TresMeshToonMaterial :color="color" />
