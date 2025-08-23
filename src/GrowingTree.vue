@@ -12,20 +12,12 @@
           <TresSphereGeometry :args="[modelValue.size]" />
           <TresMeshToonMaterial :color="modelValue.color??'#090'" />
         </TresMesh>
-        <!-- <TresMesh :position="[0, .25 * modelValue.size,0]" >
-            <TresCylinderGeometry :args="[.2 * modelValue.size, .2 * modelValue.size, .5 * modelValue.size ]"/>
-          <TresMeshToonMaterial color="#f90" />
-        </TresMesh> -->
       </template>
       <template v-else>
         <TresMesh :position="[0,1.5*modelValue.size,0]">
           <TresCylinderGeometry :args="[.1 * modelValue.size, modelValue.size, 2 * modelValue.size ]"/>
           <TresMeshToonMaterial :color="modelValue.color??'#090'" />
         </TresMesh>
-        <!-- <TresMesh :position="[0,.25 * modelValue.size,0]" >
-            <TresCylinderGeometry :args="[.2 * modelValue.size, .2 * modelValue.size, .5 * modelValue.size ]"/>
-          <TresMeshToonMaterial color="#f90" />
-        </TresMesh> -->
       </template>
       <TresGroup v-if="modelValue.color == '#a00' && modelValue.size >= 5">
         <TresMesh  :position="[2.5,.5 * modelValue.size,0]" :rotate-x="Math.PI / 2" >
@@ -49,12 +41,6 @@
           <TresMeshToonMaterial color="#a82" />
         </TresMesh>
       </TresGroup>
-      <!-- <TresGroup :position="[0,4*modelValue.size,0]" ref="tri">
-        <TresMesh>
-          <TresExtrudeGeometry :args="[testShape]" />
-          <TresMeshToonMaterial color="#000" />
-        </TresMesh>
-      </TresGroup> -->
     <TresGroup :position="[0,2.625*modelValue.size+3.25,0]" ref="crone" :scale="[.125,-.125,.125]" >
       <TresGroup :position="[-15, 0, 0]" ref="tbd" :scale="[.5,.5,.5]" />
     </TresGroup>
@@ -72,14 +58,11 @@ import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
 export default {
     setup() {
       const { onBeforeRender } = useLoop();
-      // const shapes = SVGLoader.createShapes( './TBD.svg' );
       const loader = new SVGLoader();
       
       
-      // console.debug('shapes', shapes);
       return { 
-        onBeforeRender, 
-        // shapes 
+        onBeforeRender,
         loader
       };
     },
@@ -94,16 +77,14 @@ export default {
         fallenDelta : 0
       }
     },
-    components: {
-      //  TresGroup, TresMesh, TresMeshToonMaterial, TresCylinderGeometry, TresSphereGeometry
-    },
     props: {
         modelValue: Object,
     },
     emits: ['treeClicked'],
     mounted() {
       this.onBeforeRender(({ delta, elapsed }) => {
-           this.$refs.crone.rotateY(delta);
+          //  this.$refs.crone.rotateY(delta);
+          this.$refs.crone.rotateY(Math.random() * delta);
 
            if (this.fallStarted) {
             this.fallenDelta += delta;
