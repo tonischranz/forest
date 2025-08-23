@@ -9,12 +9,16 @@
             @fallen="handleFallen(t)"
             :key="t.uuid"
             />
+        <Wood v-for="w of wood"
+          :model-value="w"
+          />
     </TresGroup>
 </template>
 
 <script>
 
 import Tree from './Tree.vue';
+import Wood from './Wood.vue';
 import * as THREE from 'three';
 
 export default {
@@ -31,7 +35,8 @@ setup() {
   },
   data() {
     return {
-        trees:[]
+        trees:[],
+        wood:[],
     }
   },
   props: {
@@ -41,6 +46,7 @@ setup() {
   },
   components: {
     Tree,
+    Wood,
   },
   methods:{
     addRandomTree() {
@@ -85,7 +91,7 @@ setup() {
       let spliced = this.trees.toSpliced(this.trees.indexOf(t), 1);
       this.trees = [];
       this.$nextTick(()=>{this.trees = spliced;});
-      
+      this.wood.push({size:t.size, x:t.x, z:t.z})
     },
     async growingTreeLoop() {
       this.growingStart = Date.now();

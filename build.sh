@@ -1,0 +1,1 @@
+docker run -it -v .:/app -w /app node:24-alpine yarn build

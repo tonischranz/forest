@@ -1,6 +1,6 @@
 <template>
     <TresGroup :position="[modelValue.x, 0, modelValue.z]" 
-      @click="({stopPropagation})=>{stopPropagation();fallStarted=Date.now();$emit('treeClicked', modelValue)}"
+      @click="({stopPropagation})=>{stopPropagation();fallStarted=Date.now();$emit('woodClicked', modelValue)}"
       ref="wholeTree"
       :rotate-x="Math.PI/2"
     >
