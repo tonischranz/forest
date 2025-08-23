@@ -37,7 +37,7 @@ const texture = await useTexture({
 // const texture = useLoader(TextureLoader, '/bp-1920.png')
 
 onBeforeRender(({ delta, elapsed }) => {
-    // console.debug('beforeRender', delta)
+    console.debug('beforeRender', delta)
 //   cube.value.rotation.y += delta
     cube.value.position.x = elapsed;
 })

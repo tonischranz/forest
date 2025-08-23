@@ -11,6 +11,7 @@
             />
         <Wood v-for="w of wood"
           :model-value="w"
+          @woodClicked="$emit('selected', w)"
           />
     </TresGroup>
 </template>
@@ -33,6 +34,7 @@ setup() {
     hexFloor.lineTo(-64, -27);
     return { hexFloor };
   },
+  emits: ['selected'],
   data() {
     return {
         trees:[],

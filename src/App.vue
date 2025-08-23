@@ -26,7 +26,7 @@
       <TresMeshToonMaterial color="#ff0" />
     </TresMesh> -->
 
-    <Hex x="0" y="0" color="#444" />
+    <Hex x="0" y="0" color="#444" @selected="w=>{selected=w}" />
 
     <Hex x="1" y="0" color="#aa0" />
     <Hex x="-1" y="0" color="#0a0" />
@@ -58,10 +58,10 @@
    </div>
    <div class="overlay bottom-right">
     <button @click.stop.prevent>*</button>
-   </div>
+   </div>-->
    <div class="overlay bottom-left">
-    <pre></pre>
-   </div> -->
+    <pre>{{ selected }}</pre>
+   </div>
 </template>
 
 <script>
@@ -93,6 +93,7 @@ export default {
       growingStart:null,
       growingStop: false,
       wood: [],
+      selected:null,
     }
   },
   components: {
