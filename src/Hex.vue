@@ -1,5 +1,5 @@
 <template>
-    <TresGroup :position="[((x*136)+(y * 68)),0,(y*118)]">
+    <TresGroup :position="[((x*136)+(y * 68)),-.5,(y*118)]">
         <TresMesh :rotation-x="Math.PI / 2" >
         <TresExtrudeGeometry :args="[hexFloor]" />
         <TresMeshToonMaterial :color="color" />
@@ -43,7 +43,7 @@ setup() {
     Tree,
   },
   methods:{
-    addTree() {
+    addRandomTree() {
 
       const createNewTree = () => ({
             type: Math.random() > .5 ? 'decidious' : 'conifer',
@@ -87,11 +87,42 @@ setup() {
       this.$nextTick(()=>{this.trees = spliced;});
       
     },
+    async growingTreeLoop() {
+      this.growingStart = Date.now();
+      this.growingStop = false;
+
+      while(!this.growingStop) {
+        await new Promise((res,rej)=>setTimeout(()=>res(), 200));
+        let delta = Date.now() - this.growingStart;
+        this.growingStart = Date.now();
+
+        const intersects = (a,b) => {
+          if (a == b) {
+            return false;
+          }
+          let dst = Math.sqrt((Math.pow(a.x - b.x, 2)) + Math.pow(a.z - b.z,2));
+          let minDistance = a.size + b.size - ((a.size + b.size) / 4);
+          return dst < minDistance;
+        }
+
+        let growing = false;
+        for (const tree of this.trees) {
+          if (!this.trees.find(t=>intersects(t,tree))) {
+            tree.size *= 1 + (delta /100000);
+            growing = true;
+          }
+        }
+      }
+    },
+  },
+  created() {
+    for (let i = 0; i < 32; i++) {
+        this.addRandomTree();
+    }
   },
   mounted() {
-    for (let i = 0; i < 32; i++) {
-        this.addTree();
-    }
+    
+    this.growingTreeLoop();
   }
 }
 </script>

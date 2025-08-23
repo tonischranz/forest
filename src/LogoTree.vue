@@ -87,7 +87,7 @@ export default {
           this.$refs.crone.rotateY(Math.random() * delta);
 
            if (this.fallStarted) {
-            this.fallenDelta += delta;
+            this.fallenDelta += delta; //Math.abs ((2 * delta) / this.modelValue.size);
             if (this.fallenDelta < Math.PI/2) {
               this.$refs.wholeTree.rotateX(delta);
             }
@@ -97,8 +97,8 @@ export default {
            }
       })
 
-      this.loader.load(
-        // './TBD.svg',
+      this.loader.load(Math.random() > .5 ?
+        './TBD.svg':
         'multicolor.svg',
         (data) => {
           console.debug('svg loaded', data.xml.viewBox);

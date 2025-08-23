@@ -1,6 +1,6 @@
 <template>
   <TresCanvas clear-color="#001" ref="canvas" >
-    <TresPerspectiveCamera />
+    <TresPerspectiveCamera ref="me" />
 
      <OrbitControls />
     <TresMesh>
@@ -26,17 +26,17 @@
       <TresMeshToonMaterial color="#ff0" />
     </TresMesh>
 
-    <GrowingTree v-for="(t,i) of trees"
+    <!-- <GrowingTree v-for="(t,i) of trees"
       @treeClicked="t=>treeClicked(t)"
       :model-value="t" @fallen="handleFallen(t)"
       :key="t.uuid"
-    />
+    /> -->
 
     <Hex x="1" y="0" color="#aa0" />
     <Hex x="-1" y="0" color="#0a0" />
-    <Hex x="1" y="-1" color="#00a" />
+    <Hex x="1" y="-1" color="#404" />
     <Hex x="-1" y="1" color="#0aa" />
-    <Hex x="0" y="-1" color="#a0a" />
+    <Hex x="0" y="-1" color="#a70" />
     <Hex x="0" y="1" color="#a00" />
 
     <Hex x="-1" y="-1" color="#aaa" />
@@ -63,7 +63,7 @@
     <button @click.stop.prevent="trees=[];createForest()">*</button>
    </div>
    <div class="overlay bottom-left">
-    <pre>{{ trees.filter(t=>t.color == '#a00') }}</pre>
+    <pre>{{ $refs.me }}</pre>
    </div>
 </template>
 
@@ -72,7 +72,7 @@
 import { TresCanvas, useLoop } from '@tresjs/core';
 import AnimatedCube from './AnimatedCube.vue';
 import AnimatedSphere from './AnimatedSphere.vue';
-import GrowingTree from './GrowingTree.vue';
+// import GrowingTree from './LogoTree.vue';
 import { OrbitControls, PointerLockControls, Superformula } from '@tresjs/cientos'
 import * as THREE from 'three'
 import Hex from './Hex.vue';
@@ -105,12 +105,15 @@ export default {
     AnimatedSphere,
     OrbitControls,
     PointerLockControls,
-    GrowingTree,
+    // GrowingTree,
     Hex,
   },
   computed: {
     totalWood() {
         return this.trees.map(({size})=>Math.pow(.2*size, 2)*2*size).reduce((sum,s)=>sum+s, 0);
+    },
+    me() {
+      return {...this.$refs.me}
     }
   },
   methods: {
@@ -206,19 +209,15 @@ export default {
       
     },
   },
+  created() {
+    
+  },
   mounted() {
-
-    this.createForest().then(()=>{
-      console.debug('starting growing Loop');
-      this.growingTreeLoop().then(()=>{
-        console.debug('growing finished');
-      });
+    this.createForest();
+    this.growingTreeLoop().then(()=>{
+      console.debug('growing finished');
     });
-
-    console.debug('mounted finished');
   }
-  
-        
 }
 </script>
 
