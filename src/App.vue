@@ -27,7 +27,7 @@
     </TresMesh> -->
 
     <Hex x="0" y="0" color="#444" />
-    
+
     <Hex x="1" y="0" color="#aa0" />
     <Hex x="-1" y="0" color="#0a0" />
     <Hex x="1" y="-1" color="#808" />
@@ -52,15 +52,16 @@
 
     <TresDirectionalLight :position="[0, 2, 4]" :intensity="1.2" cast-shadow />
   </TresCanvas>
-   <div class="overlay">
+   <!-- <div class="overlay">
       {{ +trees.length }} / {{ +totalWood.toFixed(2) }}
+        hallo
    </div>
    <div class="overlay bottom-right">
-    <button @click.stop.prevent="trees=[];createForest()">*</button>
+    <button @click.stop.prevent>*</button>
    </div>
    <div class="overlay bottom-left">
     <pre></pre>
-   </div>
+   </div> -->
 </template>
 
 <script>
@@ -112,106 +113,15 @@ export default {
     }
   },
   methods: {
-    async createForest() {
-      let failed = 0;
-      for (let i = 0 ; i < 2048 && failed < 100; i++) {
-        let tree = this.addTree();
-        if (!tree) {
-          failed++
-        }
-      }
-      console.debug('forest created');
-    },
-    addTree() {
-
-      const createNewTree = () => ({
-            type: Math.random() > .5 ? 'decidious' : 'conifer',
-            size: 2 +(Math.random()*5),
-            x: -64 + Math.random()*128,
-            z: -64 + Math.random()*148,
-            uuid: crypto.randomUUID(),
-      });
-      
-      let newTree = createNewTree();
-
-      const intersects = (a,b) => {
-        let dst = Math.sqrt((Math.pow(a.x - b.x, 2)) + Math.pow(a.z - b.z,2));
-        let minDistance = a.size + b.size;
-        return dst < minDistance;
-      }
-
-      const offsetColor = ({x,z}) => {
-        if ((z) > (x + 145) * (Math.sqrt(3)/3) && x < 0) return '#00b'; // blue
-        if ((z) < (x - 110) * (Math.sqrt(3)/3) && x > 0) return '#0bb'; //turqoise
-        if ((z) < (x + 110) * (Math.sqrt(3)/-3)) return '#bb0'; //yellow
-        if ((z) > (x - 145) * (Math.sqrt(3)/-3)) return '#b70'; //orange
-      };
-
-      let tries = 0;
-      while ((this.trees.find(t=>(intersects(t,newTree))) || offsetColor(newTree)) && tries < 100) {
-        newTree = createNewTree();
-        tries++;
-      }
-      if (!(this.trees.find(t=>(intersects(t,newTree))) || offsetColor(newTree))) {
-        this.trees.push(newTree);
-        newTree.color= offsetColor(newTree);
-        return newTree;
-      }
-      else {
-        console.debug('more than 100 tries');
-        return undefined;
-      }
-    },
-    treeClicked(tree) {
-      if (!tree.color || tree.color != '#a00') {
-        tree.color = '#a00';
-      }
-      else {
-        delete tree.color;
-      }
-    },
-    async growingTreeLoop() {
-      this.growingStart = Date.now();
-      this.growingStop = false;
-
-      while(!this.growingStop) {
-        await new Promise((res,rej)=>setTimeout(()=>res(), 200));
-        let delta = Date.now() - this.growingStart;
-        this.growingStart = Date.now();
-
-        const intersects = (a,b) => {
-          if (a == b) {
-            return false;
-          }
-          let dst = Math.sqrt((Math.pow(a.x - b.x, 2)) + Math.pow(a.z - b.z,2));
-          let minDistance = a.size + b.size - ((a.size + b.size) / 4);
-          return dst < minDistance;
-        }
-
-        let growing = false;
-        for (const tree of this.trees) {
-          if (!this.trees.find(t=>intersects(t,tree))) {
-            tree.size *= 1 + (delta /100000);
-            growing = true;
-          }
-        }
-      }
-    },
-    handleFallen(t) {
-      let spliced = this.trees.toSpliced(this.trees.indexOf(t), 1);
-      this.trees = [];
-      this.$nextTick(()=>{this.trees = spliced;});
-      
-    },
   },
   created() {
     
   },
   mounted() {
-    this.createForest();
-    this.growingTreeLoop().then(()=>{
-      console.debug('growing finished');
-    });
+    // this.createForest();
+    // this.growingTreeLoop().then(()=>{
+    //   console.debug('growing finished');
+    // });
   }
 }
 </script>
