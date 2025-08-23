@@ -4,7 +4,7 @@
       ref="wholeTree"
       :rotate-x="Math.PI/2"
     >
-      <TresMesh :position="[0, 1 * modelValue.size,0]" >
+      <TresMesh :position="[0, 1 * modelValue.size,-.22*modelValue.size]" >
             <TresCylinderGeometry :args="[.2 * modelValue.size, .2 * modelValue.size, 2 * modelValue.size ]"/>
           <TresMeshToonMaterial color="#851" />
       </TresMesh>
