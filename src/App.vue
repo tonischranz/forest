@@ -28,37 +28,33 @@
 
     <Hex x="0" y="0" color="#444" @selected="w=>{selected=w}" />
 
-    <Hex x="1" y="0" color="#aa0" />
-    <Hex x="-1" y="0" color="#0a0" />
-    <Hex x="1" y="-1" color="#808" />
-    <Hex x="-1" y="1" color="#0aa" />
-    <Hex x="0" y="-1" color="#a70" />
-    <Hex x="0" y="1" color="#a00" />
+    <Hex v-for="h of [[1,0],[-1,0],[1,-1],[-1,1],[0,-1],[0,1]]" 
+      :x="h[0]" 
+      :y="h[1]"
+      @selected="w=>{selected=w}"
+      color="#a95" />
 
-    <Hex x="-1" y="-1" color="#aaa" />
-    <Hex x="0" y="-2" color="#aaa" />
-    <Hex x="1" y="-2" color="#aaa" />
-    <Hex x="1" y="1" color="#aaa" />
-    <Hex x="2" y="0" color="#aaa" />
-    <Hex x="2" y="-1" color="#aaa" />
-    <Hex x="2" y="-2" color="#aaa" />
-    <Hex x="0" y="2" color="#aaa" />
-    <Hex x="-1" y="2" color="#999" />
-    <Hex x="-2" y="1" color="#999" />
-    <Hex x="-2" y="2" color="#999" />
-    <Hex x="-2" y="0" color="#999" />
+    <Hex v-for="h of [[-1,-1],[-1,2],
+                    [0,-2],[0,2],
+                    [1,-2],[1,1],
+                    [2,0],[2,-1],[2,-2],
+                    [-2,0],[-2,1],[-2,2]
+                    ]" 
+      :x="h[0]" 
+      :y="h[1]"
+      @selected="w=>{selected=w}"
+      color="#999" />
     
     <TresGridHelper :args="[128, 128]" />
 
     <TresDirectionalLight :position="[0, 2, 4]" :intensity="1.2" cast-shadow />
   </TresCanvas>
-   <!-- <div class="overlay">
-      {{ +trees.length }} / {{ +totalWood.toFixed(2) }}
-        hallo
+   <div class="overlay">
+        &#x2692; meine welt
    </div>
    <div class="overlay bottom-right">
     <button @click.stop.prevent>*</button>
-   </div>-->
+   </div>
    <div class="overlay bottom-left">
     <pre>{{ selected }}</pre>
    </div>
@@ -165,6 +161,7 @@ body {
   padding: 0;
   height: 100%;
   width: 100%;
+  font-family: sans-serif;
 }
 #app {
   height: 100%;

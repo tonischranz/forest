@@ -1,6 +1,11 @@
 <template>
-    <TresGroup :position="[modelValue.x, 0, modelValue.z]" 
-      @click="({stopPropagation})=>{stopPropagation();fallStarted=Date.now();$emit('treeClicked', modelValue)}"
+    <TresGroup :position="[modelValue.x, 0, modelValue.z]"
+      :rotate-y="fallingOrientation" 
+      @click="({stopPropagation})=>{
+        stopPropagation();
+        fallingOrientation=Math.random()*Math.PI*(Math.random()>.5?-1:1)
+        fallStarted=Date.now();
+        $emit('treeClicked', modelValue)}"
       ref="wholeTree"
     >
       <TresMesh :position="[0, 1 * modelValue.size,0]" >
@@ -10,13 +15,13 @@
       <template v-if="modelValue.type == 'decidious'">
         <TresMesh :position="[0,1.5*modelValue.size,0]">
           <TresSphereGeometry :args="[modelValue.size]" />
-          <TresMeshToonMaterial :color="modelValue.color??'#090'" />
+           <TresMeshPhongMaterial :color="modelValue.color??'#090'" />
         </TresMesh>
       </template>
       <template v-else>
         <TresMesh :position="[0,1.5*modelValue.size,0]">
           <TresCylinderGeometry :args="[.1 * modelValue.size, modelValue.size, 2 * modelValue.size ]"/>
-          <TresMeshToonMaterial :color="modelValue.color??'#090'" />
+           <TresMeshPhongMaterial :color="modelValue.color??'#050'" />
         </TresMesh>
       </template>
     </TresGroup>
@@ -36,7 +41,8 @@ export default {
     },
     data() {
       return {
-        fallenDelta : 0
+        fallenDelta : 0,
+        fallingOrientation: 0,
       }
     },
     props: {
@@ -52,7 +58,7 @@ export default {
               this.$refs.wholeTree.rotateX(delta);
             }
             else {
-              this.$emit('fallen');
+              this.$emit('fallen', this.fallingOrientation);
             }
            }
       })

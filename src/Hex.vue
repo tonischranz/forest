@@ -6,7 +6,7 @@
         </TresMesh>
         <Tree v-for="(t,i) of trees"
             :model-value="t"
-            @fallen="handleFallen(t)"
+            @fallen="o=>handleFallen(t, o)"
             :key="t.uuid"
             />
         <Wood v-for="w of wood"
@@ -89,11 +89,11 @@ setup() {
         return undefined;
       }
     },
-    handleFallen(t) {
+    handleFallen(t, o) {
       let spliced = this.trees.toSpliced(this.trees.indexOf(t), 1);
       this.trees = [];
       this.$nextTick(()=>{this.trees = spliced;});
-      this.wood.push({size:t.size, x:t.x, z:t.z})
+      this.wood.push({size:t.size.toFixed(0),x:t.x.toFixed(0), z:t.z.toFixed(0), orientation:o})
     },
     async growingTreeLoop() {
       this.growingStart = Date.now();
