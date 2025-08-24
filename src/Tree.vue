@@ -21,7 +21,7 @@
       <template v-else>
         <TresMesh :position="[0,1.5*modelValue.size,0]">
           <TresCylinderGeometry :args="[.1 * modelValue.size, modelValue.size, 2 * modelValue.size ]"/>
-           <TresMeshPhongMaterial :color="modelValue.color??'#050'" />
+           <TresMeshPhongMaterial :color="modelValue.color??'#070'" />
         </TresMesh>
       </template>
     </TresGroup>

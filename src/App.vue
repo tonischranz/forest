@@ -60,7 +60,7 @@
     
     <TresGridHelper v-if="grid" :args="[188, 128]" />
 
-    <TresDirectionalLight :position="[0, 2000, 4000]" :intensity="1.2" cast-shadow />
+    <TresDirectionalLight :position="[0, 20000, 8000]" :intensity="1.2" cast-shadow />
   </TresCanvas>
    <div class="overlay">
         &#x2692; meine welt
