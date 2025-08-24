@@ -2,19 +2,15 @@
   <TresCanvas clear-color="#001" ref="canvas" >
     <TresPerspectiveCamera :position="[160, 64, 160]" ref="cam" />
     
-     <!-- <PointerLockControls v-if="!grid"  /> -->
      <OrbitControls ref="ctrl" />
 
-     <TresMesh :position="[0,0,10]">
-      <TresCylinderGeometry :args="[.1, .1, 75]"/>
-      <TresMeshToonMaterial color="#000" />
-    </TresMesh>
+     
     <TresMesh :position="[0,0,10]">
-      <TresCylinderGeometry :args="[.1, .1, 75]"/>
+      <TresCylinderGeometry :args="[.1, .1, 16]"/>
       <TresMeshToonMaterial color="#0F3" />
     </TresMesh>
     <TresMesh>
-      <TresCylinderGeometry :args="[.1, .1, 75]"/>
+      <TresCylinderGeometry :args="[.1, .1, 16]"/>
       <TresMeshToonMaterial color="#0F3" />
     </TresMesh>
     <TresMesh :rotation-z="Math.PI/2" :position="[0,0,10]">
@@ -75,15 +71,15 @@
         if (started) {
           start();
         }
-        // console.debug('start');
         }"
       >
       <pre>
-p:[{{ +$refs.ctrl?.instance.object.position.x.toFixed(3)??'' }},{{ +$refs.ctrl?.instance.object.position.y.toFixed(3)??'' }}, {{ +$refs.ctrl?.instance.object.position.z.toFixed(3)??'' }}]
-r:{{ $refs.ctrl?.instance.object.rotation }}
-q:{{ $refs.ctrl?.instance.object.quaternion }}
+p : [ {{ +$refs.ctrl?.instance.object.position.x.toFixed(3)??'' }} , {{ +$refs.ctrl?.instance.object.position.y.toFixed(3)??'' }} , {{ +$refs.ctrl?.instance.object.position.z.toFixed(3)??'' }} ]
+r : ( {{ +$refs.ctrl?.instance.object.rotation.x.toFixed(3) }} , {{ +$refs.ctrl?.instance.object.rotation.y.toFixed(3) }} , {{ +$refs.ctrl?.instance.object.rotation.x.toFixed(z) }} )
+q : ( {{ +$refs.ctrl?.instance.object.quaternion.x.toFixed(3) }} / {{ +$refs.ctrl?.instance.object.quaternion.y.toFixed(3) }}/{{ $refs.ctrl?.instance.object.quaternion.z.toFixed(3) }} / {{ +$refs.ctrl?.instance.object.quaternion.w.toFixed(3) }} )
 <template v-if="grid">props:{{ Object.keys($refs.ctrl?.instance.object??{}) }}</template>
       </pre>
+      <pre>{{ selected }}</pre>
       <pre>
 f:{{ moveForward }}
 b:{{ moveBackward }}
@@ -93,11 +89,6 @@ r:{{ moveRight }}
       <pre>
         {{ (started?'stop':'start') }}
       </pre>
-    <!-- <pre>{{ selected }}</pre> -->
-    <!-- <pre>{{ $refs.cam?.position }}</pre> -->
-    <!-- <pre>{{ Object.keys($refs.canvas?.context?.renderer._value??{}) }}</pre> -->
-    <!-- <pre>{{ $refs.canvas?.context.renderer }}</pre> -->
-     <!-- <pre>{{ Object.keys($refs.canvas).join() }}</pre> -->
    </div>
 </template>
 
@@ -229,6 +220,8 @@ export default {
       this.$refs.ctrl.instance.object.position.x=10;
       this.$refs.ctrl.instance.object.position.y=6;
       this.$refs.ctrl.instance.object.position.z=10;
+
+      this.$refs.canvas.context.renderer._value.setAnimationLoop(null);
 
         this.$refs.canvas.context.renderer._value.setAnimationLoop(d=>{
           

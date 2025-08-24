@@ -1,7 +1,7 @@
 <template>
 
     <TresMesh :position="[modelValue.x, 0, modelValue.z]">
-      <TresCylinderGeometry :args="[.1, .1, 75]"/>
+      <TresCylinderGeometry :args="[.1, .1, 16]"/>
       <TresMeshToonMaterial color="#af3" />
     </TresMesh>
 
@@ -13,7 +13,7 @@
       :rotate-x="Math.PI/2"
     >
           <TresMesh :position="[0, 2 * modelValue.size,-.2*modelValue.size]" :rotate-x="Math.PI/2">
-            <TresCylinderGeometry :args="[.1, .1, 75]"/>
+            <TresCylinderGeometry :args="[.1, .1, 16]"/>
           <TresMeshToonMaterial color="#a00" />
       </TresMesh>
 
