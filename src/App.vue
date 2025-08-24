@@ -1,11 +1,9 @@
-<template>
+<template >
   <TresCanvas clear-color="#001" ref="canvas" >
     <TresPerspectiveCamera :position="[160, 64, 160]" ref="cam" />
-    <!-- <TresPerspectiveCamera :position="()=>[me.x, me.y, me.z]" ref="cam" /> -->
-
-    <!-- <PointerLockControls /> -->
-     <PointerLockControls v-if="!grid" />
-     <OrbitControls v-if="grid" />
+    
+     <!-- <PointerLockControls v-if="!grid"  /> -->
+     <OrbitControls ref="ctrl" />
 
      <TresMesh :position="[0,0,10]">
       <TresCylinderGeometry :args="[.1, .1, 75]"/>
@@ -21,7 +19,7 @@
     </TresMesh>
     <TresMesh :rotation-z="Math.PI/2" :position="[0,0,10]">
       <TresCylinderGeometry :args="[.1, .1, 756]" />
-      <TresMeshToonMaterial color="#F03" />
+      <TresMeshToonMaterial color="#000" />
     </TresMesh>
     <TresMesh :rotation-z="Math.PI/2">
       <TresCylinderGeometry :args="[.1, .1, 756]" />
@@ -73,17 +71,33 @@
    </div>
    <div class="overlay bottom-left"
       @click="() => {
-        console.debug('start');
-        $refs.cam.position.x=10;
-        $refs.cam.position.y=6;
-        $refs.cam.position.z=10;
-      }"
-    >
-    <pre>{{ selected }}</pre>
-    <pre>{{ $refs.cam?.position }}</pre>
-    <pre>{{ Object.keys($refs.canvas.context) }}</pre>
-    <pre>{{ $refs.canvas.context.renderer }}</pre>
-     <pre>{{ Object.keys($refs.canvas).join() }}</pre>
+        started=!started;
+        if (started) {
+          start();
+        }
+        // console.debug('start');
+        }"
+      >
+      <pre>
+p:[{{ +$refs.ctrl?.instance.object.position.x.toFixed(3)??'' }},{{ +$refs.ctrl?.instance.object.position.y.toFixed(3)??'' }}, {{ +$refs.ctrl?.instance.object.position.z.toFixed(3)??'' }}]
+r:{{ $refs.ctrl?.instance.object.rotation }}
+q:{{ $refs.ctrl?.instance.object.quaternion }}
+<template v-if="grid">props:{{ Object.keys($refs.ctrl?.instance.object??{}) }}</template>
+      </pre>
+      <pre>
+f:{{ moveForward }}
+b:{{ moveBackward }}
+l:{{ moveLeft }}
+r:{{ moveRight }}
+      </pre>
+      <pre>
+        {{ (started?'stop':'start') }}
+      </pre>
+    <!-- <pre>{{ selected }}</pre> -->
+    <!-- <pre>{{ $refs.cam?.position }}</pre> -->
+    <!-- <pre>{{ Object.keys($refs.canvas?.context?.renderer._value??{}) }}</pre> -->
+    <!-- <pre>{{ $refs.canvas?.context.renderer }}</pre> -->
+     <!-- <pre>{{ Object.keys($refs.canvas).join() }}</pre> -->
    </div>
 </template>
 
@@ -117,8 +131,14 @@ export default {
       growingStop: false,
       wood: [],
       selected:null,
-      grid:true,
+      grid:false,
       me:{x:10, y:6,z:10},
+      started:false,
+      moveForward : false,
+			moveBackward : false,
+			moveLeft : false,
+			moveRight : false,
+			canJump : false,
     }
   },
   components: {
@@ -139,21 +159,93 @@ export default {
     }
   },
   methods: {
+    start() {
+      const onKeyDown = ( event ) => {
+        console.debug('kdo', event.code );
+
+					switch ( event.code ) {
+
+						case 'ArrowUp':
+						case 'KeyW':
+              console.debug('fwd');
+							this.moveForward = true;
+							break;
+
+						case 'ArrowLeft':
+						case 'KeyA':
+							this.moveLeft = true;
+							break;
+
+						case 'ArrowDown':
+						case 'KeyS':
+							this.moveBackward = true;
+							break;
+
+						case 'ArrowRight':
+						case 'KeyD':
+							this.moveRight = true;
+							break;
+
+						case 'Space':
+							if ( this.canJump === true ) velocity.y += 350;
+							this.canJump = false;
+							break;
+
+					}
+
+				};
+
+				const onKeyUp = ( event ) => {
+          console.debug('kup', event.code );
+
+					switch ( event.code ) {
+
+						case 'ArrowUp':
+						case 'KeyW':
+							this.moveForward = false;
+							break;
+
+						case 'ArrowLeft':
+						case 'KeyA':
+							this.moveLeft = false;
+							break;
+
+						case 'ArrowDown':
+						case 'KeyS':
+							this.moveBackward = false;
+							break;
+
+						case 'ArrowRight':
+						case 'KeyD':
+							this.moveRight = false;
+							break;
+
+					}
+        };
+
+      document.addEventListener( 'keydown', onKeyDown );
+			document.addEventListener( 'keyup', onKeyUp );
+
+      this.$refs.ctrl.instance.object.position.x=10;
+      this.$refs.ctrl.instance.object.position.y=6;
+      this.$refs.ctrl.instance.object.position.z=10;
+
+        this.$refs.canvas.context.renderer._value.setAnimationLoop(d=>{
+          
+
+          if (this.$refs.ctrl.instance.object && this.started){
+              
+              this.$refs.ctrl.instance.object.position.x+=d/100000;
+            
+          }
+        })
+    }
   },
   created() {
     
   },
   mounted() {
-    console.debug('renderer', this.$refs.canvas);
-    // this.createForest();
-    // this.growingTreeLoop().then(()=>{
-    //   console.debug('growing finished');
-    // });
-    // this.$refs.canvas.context.renderer.setAnimationLoop((d,e)=>{
-    //   console.debug ('anim', d,e)
-    //   this.$refs.cam.poisition.x += 1;
-    //   this.$refs.cam.poisition.z += 1;
-    // })
+
   }
 }
 </script>
@@ -166,6 +258,8 @@ export default {
   color:white;
   max-height: 100vh;
   overflow-y: auto;
+  padding:1em;
+  background-color: #0004;
 }
 
 .overlay.bottom-right {
