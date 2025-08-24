@@ -99,7 +99,7 @@ setup() {
       this.growingStop = false;
 
       while(!this.growingStop) {
-        await new Promise((res,rej)=>setTimeout(()=>res(), 200));
+        await new Promise((res,rej)=>setTimeout(()=>res(), 15000));
         let delta = Date.now() - this.growingStart;
         this.growingStart = Date.now();
 
@@ -115,7 +115,7 @@ setup() {
         let growing = false;
         for (const tree of this.trees) {
           if (!this.trees.find(t=>intersects(t,tree))) {
-            tree.size *= 1 + (delta /100000);
+            tree.size *= 1 + (delta /800000);
             growing = true;
           }
         }

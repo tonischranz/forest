@@ -66,12 +66,7 @@
     <button @click.stop.prevent="grid=!grid">*</button>
    </div>
    <div class="overlay bottom-left"
-      @click="() => {
-        started=!started;
-        if (started) {
-          start();
-        }
-        }"
+      @click="start()"
       >
       <pre>
 p : [ {{ +$refs.ctrl?.instance.object.position.x.toFixed(3)??'' }} , {{ +$refs.ctrl?.instance.object.position.y.toFixed(3)??'' }} , {{ +$refs.ctrl?.instance.object.position.z.toFixed(3)??'' }} ]
@@ -151,7 +146,37 @@ export default {
   },
   methods: {
     start() {
-      const onKeyDown = ( event ) => {
+
+      this.$refs.canvas.context.renderer._value.setAnimationLoop(null);
+
+      // this.started = new DOMHighResTimeStamp()
+      this.started = !this.started;
+        if (this.started) {
+
+      this.$refs.ctrl.instance.object.position.x=10;
+      this.$refs.ctrl.instance.object.position.y=6;
+      this.$refs.ctrl.instance.object.position.z=10;
+
+      
+
+        this.$refs.canvas.context.renderer._value.setAnimationLoop(d=>{
+
+          if (this.$refs.ctrl.instance.object && this.started){
+              
+              this.$refs.ctrl.instance.object.position.x+=((this.started===true?d:this.started) - d) / 64;
+            
+          }
+
+          this.started = d;
+        })
+      }
+    }
+  },
+  created() {
+    
+  },
+  mounted() {
+const onKeyDown = ( event ) => {
         console.debug('kdo', event.code );
 
 					switch ( event.code ) {
@@ -216,29 +241,6 @@ export default {
 
       document.addEventListener( 'keydown', onKeyDown );
 			document.addEventListener( 'keyup', onKeyUp );
-
-      this.$refs.ctrl.instance.object.position.x=10;
-      this.$refs.ctrl.instance.object.position.y=6;
-      this.$refs.ctrl.instance.object.position.z=10;
-
-      this.$refs.canvas.context.renderer._value.setAnimationLoop(null);
-
-        this.$refs.canvas.context.renderer._value.setAnimationLoop(d=>{
-          
-
-          if (this.$refs.ctrl.instance.object && this.started){
-              
-              this.$refs.ctrl.instance.object.position.x+=d/100000;
-            
-          }
-        })
-    }
-  },
-  created() {
-    
-  },
-  mounted() {
-
   }
 }
 </script>
