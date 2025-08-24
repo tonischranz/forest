@@ -1,8 +1,11 @@
 <template>
   <TresCanvas clear-color="#001" ref="canvas" >
-    <TresPerspectiveCamera  />
+    <TresPerspectiveCamera :position="[160, 64, 160]" ref="cam" />
+    <!-- <TresPerspectiveCamera :position="()=>[me.x, me.y, me.z]" ref="cam" /> -->
 
-     <OrbitControls />
+    <!-- <PointerLockControls /> -->
+     <PointerLockControls v-if="!grid" />
+     <OrbitControls v-if="grid" />
 
      <TresMesh :position="[0,0,10]">
       <TresCylinderGeometry :args="[.1, .1, 75]"/>
@@ -68,14 +71,25 @@
    <div class="overlay bottom-right">
     <button @click.stop.prevent="grid=!grid">*</button>
    </div>
-   <div class="overlay bottom-left">
+   <div class="overlay bottom-left"
+      @click="() => {
+        console.debug('start');
+        $refs.cam.position.x=10;
+        $refs.cam.position.y=6;
+        $refs.cam.position.z=10;
+      }"
+    >
     <pre>{{ selected }}</pre>
+    <pre>{{ $refs.cam?.position }}</pre>
+    <pre>{{ Object.keys($refs.canvas.context) }}</pre>
+    <pre>{{ $refs.canvas.context.renderer }}</pre>
+     <pre>{{ Object.keys($refs.canvas).join() }}</pre>
    </div>
 </template>
 
 <script>
 
-import { TresCanvas, useLoop } from '@tresjs/core';
+import { TresCanvas } from '@tresjs/core';
 import AnimatedCube from './AnimatedCube.vue';
 import AnimatedSphere from './AnimatedSphere.vue';
 import { OrbitControls, PointerLockControls, Superformula } from '@tresjs/cientos'
@@ -104,6 +118,7 @@ export default {
       wood: [],
       selected:null,
       grid:true,
+      me:{x:10, y:6,z:10},
     }
   },
   components: {
@@ -129,10 +144,16 @@ export default {
     
   },
   mounted() {
+    console.debug('renderer', this.$refs.canvas);
     // this.createForest();
     // this.growingTreeLoop().then(()=>{
     //   console.debug('growing finished');
     // });
+    // this.$refs.canvas.context.renderer.setAnimationLoop((d,e)=>{
+    //   console.debug ('anim', d,e)
+    //   this.$refs.cam.poisition.x += 1;
+    //   this.$refs.cam.poisition.z += 1;
+    // })
   }
 }
 </script>

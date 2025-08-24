@@ -6,8 +6,23 @@
         fallingOrientation=Math.random()*Math.PI*(Math.random()>.5?-1:1)
         fallStarted=Date.now();
         $emit('treeClicked', modelValue)}"
+      @double-click="({stopPropagation})=>{
+        stopPropagation();
+        fallingOrientation=Math.random()*Math.PI*(Math.random()>.5?-1:1)
+        fallStarted=Date.now();
+        $emit('treeClicked', modelValue)}"
       ref="wholeTree"
+      @context-menu="({stopPropagation})=>{
+        stopPropagation();
+        fallingOrientation=Math.random()*Math.PI*(Math.random()>.5?-1:1)
+        fallStarted=Date.now();
+        $emit('treeClicked', modelValue)}"
     >
+    <!-- @click="({stopPropagation})=>{
+        stopPropagation();
+        fallingOrientation=Math.random()*Math.PI*(Math.random()>.5?-1:1)
+        fallStarted=Date.now();
+        $emit('treeClicked', modelValue)}" -->
       <TresMesh :position="[0, 1 * modelValue.size,0]" >
             <TresCylinderGeometry :args="[.2 * modelValue.size, .2 * modelValue.size, 2 * modelValue.size ]"/>
           <TresMeshPhongMaterial color="#851" />
