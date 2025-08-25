@@ -4,14 +4,26 @@
         <TresExtrudeGeometry :args="[hexFloor]" />
         <TresMeshPhongMaterial :color="color" />
         </TresMesh>
-        <Tree v-for="(t,i) of trees"
+        <!-- <Tree v-for="(t,i) of trees"
             :model-value="t"
-            @fallen="o=>handleFallen(t, o)"
+            @fallen="o=>handleFallen(t, o, i)"
+            @selected="$emit('selected', t)"
+            
+            /> -->
+            <!-- <template v-for="(t,i) of trees" :key="`${x}-${y}-tree-${t.uuid}`"> -->
+              <!-- :key="`${x}-${y}-tree-${t.uuid}`" -->
+            <Tree v-for="(t,i) of trees"
+            :model-value="t"
+            @fallen="o=>handleFallen(t, o, i)"
+            @selected="$emit('selected', t)"
             :key="t.uuid"
             />
-        <Wood v-for="w of wood"
+            <!-- </template> -->
+            <!-- :key="`${x}-${y}-tree-${i}`" -->
+        <Wood v-for="(w,i) of wood"
           :model-value="w"
           @woodClicked="$emit('selected', w)"
+          :key="`${x}-${y}-wood-${i}`"
           />
     </TresGroup>
 </template>
@@ -34,7 +46,7 @@ setup() {
     hexFloor.lineTo(-64, -27);
     return { hexFloor };
   },
-  emits: ['selected'],
+  emits: ['selected', 'woodChanged'],
   data() {
     return {
         trees:[],
@@ -58,6 +70,7 @@ setup() {
             size: 2 +(Math.random()*5),
             x: -64 + Math.random()*128,
             z: -64 + Math.random()*148,
+            uuid:crypto.randomUUID(),
       });
       
       let newTree = createNewTree();
@@ -88,11 +101,9 @@ setup() {
         return undefined;
       }
     },
-    handleFallen(t, o) {
-      let spliced = this.trees.toSpliced(this.trees.indexOf(t), 1);
-      this.trees = [];
-      this.$nextTick(()=>{this.trees = spliced;});
-      this.wood.push({size:t.size.toFixed(0),x:t.x.toFixed(0), z:t.z.toFixed(0), orientation:o})
+    handleFallen(t, {orientation}, i) {
+      this.trees.splice(i, 1)
+      this.wood.push({size:t.size.toFixed(0),x:t.x, z:t.z, orientation})
     },
     async growingTreeLoop() {
       this.growingStart = Date.now();
@@ -114,9 +125,9 @@ setup() {
 
         let growing = false;
         for (const tree of this.trees) {
-          if (!this.trees.find(t=>intersects(t,tree))) {
+          if (!this.trees.find(t=>intersects(t,tree)) && tree.size <= 25) {
             tree.size *= 1 + (delta /800000);
-            growing = true;
+            tree.size = Math.min(tree.size, 25);
           }
         }
       }

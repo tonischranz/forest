@@ -3,16 +3,19 @@
       :rotate-y="fallingOrientation" 
       @click="({stopPropagation})=>{
         stopPropagation();
-        fallingOrientation=Math.random()*Math.PI*(Math.random()>.5?-1:1)
-        fallStarted=Date.now();
-        $emit('treeClicked', modelValue)}"
+          if (fallingOrientation===null) {
+            fallingOrientation=Math.random()*Math.PI*(Math.random()>.5?-1:1)
+            fallStarted=Date.now();
+            $emit('treeClicked', modelValue)
+          }
+        }"
       ref="wholeTree"
       @context-menu="({stopPropagation})=>{
         stopPropagation();
         $emit('selected', modelValue)}"
     >
       <TresMesh :position="[0, 1 * modelValue.size,0]" >
-            <TresCylinderGeometry :args="[.2 * modelValue.size, .2 * modelValue.size, 2 * modelValue.size ]"/>
+          <TresCylinderGeometry :args="[.2 * modelValue.size, .2 * modelValue.size, 2 * modelValue.size ]" ref="trunk"/>
           <TresMeshPhongMaterial color="#851" />
       </TresMesh>
       <template v-if="modelValue.type == 'decidious'">
@@ -45,13 +48,13 @@ export default {
     data() {
       return {
         fallenDelta : 0,
-        fallingOrientation: 0,
+        fallingOrientation: null,
       }
     },
     props: {
         modelValue: Object,
     },
-    emits: ['treeClicked'],
+    emits: ['treeClicked', 'fallen'],
     mounted() {
       this.onBeforeRender(({ delta, elapsed }) => {
 
@@ -61,7 +64,7 @@ export default {
               this.$refs.wholeTree.rotateX(delta);
             }
             else {
-              this.$emit('fallen', this.fallingOrientation);
+              this.$emit('fallen', {orientation : this.fallingOrientation});
             }
            }
       })
