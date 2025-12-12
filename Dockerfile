@@ -2,8 +2,8 @@ FROM node:24-alpine AS build
 
 COPY . /app
 WORKDIR /app
-RUN yarn  build
+RUN yarn && yarn build
 
 FROM nginx:alpine
 
-COPY --from=build /app/dist/ /usr/share/nginx/html/
+COPY --from=build /app/dist/ /usr/share/nginx/html/forest/

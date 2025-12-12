@@ -53,7 +53,7 @@
     <TresDirectionalLight :position="[0, 20000, 8000]" :intensity="1.2" cast-shadow />
   </TresCanvas>
   <div class="overlay">
-    &#x2692; meine welt
+    &#x2692;
   </div>
   <div class="overlay bottom-right" @click="grid = !grid">
     <!-- <button @click.stop.prevent="grid=!grid">*</button> -->
